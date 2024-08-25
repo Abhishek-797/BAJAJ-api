@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>21BCE10084</title>
+</head>
+<body>
+    <h1>Send Data to API</h1>
+    <form id="dataForm">
+        <label for="data">Enter Data (comma-separated):</label><br>
+        <input type="text" id="data" name="data" placeholder="enter the data"><br><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <h2>Response:</h2>
+    <pre id="response"></pre>
+
+    <script>
+       document.getElementById('dataForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const formData = document.getElementById('data').value.split(',').map(item => item.trim());
+
+    fetch('/api', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ data: formData })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json(); 
+    })
+    .then(data => {
+        document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+    })
+    .catch(error => {
+        document.getElementById('response').textContent = 'Error: ' + error.message;
+    });
+});
+    </script>
+</body>
+</html>
